@@ -16,14 +16,14 @@ export default defineConfig({
   build: {
     outDir: "dist",
     rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ["react", "react-dom", "react-router-dom"],
-          editor: ["@blocknote/core", "@blocknote/react", "@blocknote/mantine"],
-          charts: ["recharts", "react-force-graph-2d"],
-        },
-      },
+  output: {
+    manualChunks: (id) => {
+      if (id.includes("react-dom") || id.includes("react-router-dom") || (id.includes("node_modules/react/") )) return "vendor";
+      if (id.includes("@blocknote")) return "editor";
+      if (id.includes("recharts") || id.includes("react-force-graph")) return "charts";
     },
+  },
+},
   },
   server: {
     host: "::",
