@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 30 10% 94%;
+    --foreground: 30 8% 10%;
+    --card: 30 10% 90%;
+    --card-foreground: 30 8% 10%;
+    --popover: 30 10% 90%;
+    --popover-foreground: 30 8% 10%;
+    --primary: 38 90% 50%;
+    --primary-foreground: 30 10% 3%;
+    --secondary: 30 10% 86%;
+    --secondary-foreground: 30 8% 20%;
+    --muted: 30 8% 82%;
+    --muted-foreground: 30 8% 40%;
+    --accent: 38 90% 50%;
+    --accent-foreground: 30 10% 3%;
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 30 8% 78%;
+    --input: 30 8% 78%;
+    --ring: 38 90% 50%;
+    --radius: 0.5rem;
+    --sidebar-background: 30 10% 90%;
+    --sidebar-foreground: 30 8% 20%;
+    --sidebar-primary: 38 90% 50%;
+    --sidebar-primary-foreground: 30 10% 3%;
+    --sidebar-accent: 30 10% 86%;
+    --sidebar-accent-foreground: 30 8% 20%;
+    --sidebar-border: 30 8% 78%;
+    --sidebar-ring: 38 90% 50%;
+
+    --panel: 30 10% 88%;
+    --surface-elevated: 30 10% 85%;
+    --text-main: 30 8% 10%;
+    --text-muted: 30 8% 40%;
+    --border-subtle: 30 8% 0% / 0.08;
+    --shadow-panel: 0 0 0 1px rgba(0,0,0,0.06), 0 8px 16px -4px rgba(0,0,0,0.1);
+    --shadow-elevated: 0 0 0 1px rgba(0,0,0,0.08), 0 12px 24px -6px rgba(0,0,0,0.15);
+    --transition-panel: 200ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .dark {
+    --background: 25 12% 4%;
+    --foreground: 35 20% 88%;
+    --card: 25 12% 7%;
+    --card-foreground: 35 20% 88%;
+    --popover: 25 14% 8%;
+    --popover-foreground: 35 20% 88%;
+    --primary: 38 85% 55%;
+    --primary-foreground: 25 12% 4%;
+    --secondary: 25 10% 12%;
+    --secondary-foreground: 35 15% 85%;
+    --muted: 25 10% 14%;
+    --muted-foreground: 35 10% 50%;
+    --accent: 30 70% 45%;
+    --accent-foreground: 35 20% 95%;
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 25 8% 16%;
+    --input: 25 8% 16%;
+    --ring: 38 85% 55%;
+
+    --sidebar-background: 25 14% 6%;
+    --sidebar-foreground: 35 15% 75%;
+    --sidebar-primary: 38 85% 55%;
+    --sidebar-primary-foreground: 25 12% 4%;
+    --sidebar-accent: 25 10% 12%;
+    --sidebar-accent-foreground: 35 15% 85%;
+    --sidebar-border: 25 8% 16%;
+    --sidebar-ring: 38 85% 55%;
+
+    --panel: 25 12% 7%;
+    --surface-elevated: 25 12% 10%;
+    --text-main: 35 20% 88%;
+    --text-muted: 35 10% 50%;
+    --border-subtle: 35 10% 100% / 0.06;
+    --shadow-panel: 0 0 0 1px rgba(255,200,50,0.04), 0 8px 16px -4px rgba(0,0,0,0.5);
+    --shadow-elevated: 0 0 0 1px rgba(255,200,50,0.06), 0 12px 24px -6px rgba(0,0,0,0.6);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Sora', system-ui, sans-serif;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fraunces', Georgia, serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Fraunces', Georgia, serif;
+  }
+  .font-body {
+    font-family: 'Sora', system-ui, sans-serif;
+  }
+  .font-mono-editor {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .shadow-panel {
+    box-shadow: var(--shadow-panel);
+  }
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+  .transition-panel {
+    transition: all var(--transition-panel);
+  }
+  .prose-zettel {
+    max-width: 65ch;
+    text-wrap: pretty;
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 3px;
+  }
+}
+
+/* BlockNote theme overrides */
+.blocknote-zettel {
+  font-family: 'Sora', system-ui, sans-serif;
+}
+
+[data-theming-css-variables-demo] {
+  --bn-colors-editor-background: hsl(var(--background));
+  --bn-colors-editor-text: hsl(var(--foreground));
+  --bn-colors-menu-background: hsl(var(--card));
+  --bn-colors-menu-text: hsl(var(--card-foreground));
+  --bn-colors-tooltip-background: hsl(var(--popover));
+  --bn-colors-tooltip-text: hsl(var(--popover-foreground));
+  --bn-colors-hovered-background: hsl(var(--secondary));
+  --bn-colors-hovered-text: hsl(var(--secondary-foreground));
+  --bn-colors-selected-background: hsl(var(--primary) / 0.15);
+  --bn-colors-selected-text: hsl(var(--primary));
+  --bn-colors-disabled-background: hsl(var(--muted));
+  --bn-colors-disabled-text: hsl(var(--muted-foreground));
+  --bn-colors-shadow: var(--shadow-elevated);
+  --bn-colors-border: hsl(var(--border));
+  --bn-colors-side-menu: hsl(var(--muted-foreground));
+  --bn-font-family: 'Sora', system-ui, sans-serif;
+  --bn-border-radius: var(--radius);
+}
