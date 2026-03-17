@@ -33,7 +33,7 @@ jobs:
         env:
           # Set to /<repo-name>/ if deploying to https://<user>.github.io/<repo>/
           # Leave as / if deploying to https://<user>.github.io/
-          VITE_BASE_URL: /
+          VITE_BASE_URL: /Brain-Waver
         run: npm run build
 
       - name: Setup Pages
