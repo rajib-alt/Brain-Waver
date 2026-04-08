@@ -8,11 +8,6 @@ export interface NoteFile {
   content?: string;
   isFolder?: boolean;
   children?: NoteFile[];
-  contentType?: string;
-  annotation?: string;
-  confidence?: number;
-  influencedBy?: string[];
-  sources?: string[];
 }
 
 export interface GitHubConfig {
@@ -81,28 +76,6 @@ export const useApp = () => {
 // GitHub API helpers
 const toBase64 = (str: string) => btoa(unescape(encodeURIComponent(str)));
 const fromBase64 = (str: string) => decodeURIComponent(escape(atob(str)));
-
-// Frontmatter utilities
-function parseFrontmatter(content: string): { frontmatter: any; body: string } {
-  const lines = content.split('\n');
-  if (lines[0] !== '---') return { frontmatter: {}, body: content };
-  const endIndex = lines.findIndex((line, i) => i > 0 && line === '---');
-  if (endIndex === -1) return { frontmatter: {}, body: content };
-  const frontmatterStr = lines.slice(1, endIndex).join('\n');
-  const body = lines.slice(endIndex + 1).join('\n');
-  try {
-    const frontmatter = frontmatterStr.trim() ? JSON.parse(frontmatterStr) : {};
-    return { frontmatter, body };
-  } catch {
-    return { frontmatter: {}, body: content };
-  }
-}
-
-function generateFrontmatter(frontmatter: any, body: string): string {
-  if (Object.keys(frontmatter).length === 0) return body;
-  const fmStr = JSON.stringify(frontmatter, null, 2);
-  return `---\n${fmStr}\n---\n${body}`;
-}
 
 async function githubFetch(config: GitHubConfig, path: string, options?: RequestInit) {
   const url = `https://api.github.com/repos/${config.username}/${config.repo}/contents/${path}`;
@@ -241,18 +214,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           } else if (!node.isFolder) {
             try {
               const data = await githubFetch(config, node.path);
-              const fullContent = fromBase64(data.content);
-              const { frontmatter, body } = parseFrontmatter(fullContent);
-              result.push({ 
-                ...node, 
-                content: body, 
-                sha: data.sha,
-                contentType: frontmatter.contentType,
-                annotation: frontmatter.annotation,
-                confidence: frontmatter.confidence,
-                influencedBy: frontmatter.influencedBy,
-                sources: frontmatter.sources,
-              });
+              result.push({ ...node, content: fromBase64(data.content), sha: data.sha });
             } catch {
               result.push(node);
             }
@@ -275,21 +237,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (!config) return;
     try {
       const data = await githubFetch(config, path);
-      const fullContent = fromBase64(data.content);
-      const { frontmatter, body } = parseFrontmatter(fullContent);
-      const file: NoteFile = { 
-        path, 
-        name: path.split('/').pop() || path, 
-        content: body, 
-        sha: data.sha,
-        contentType: frontmatter.contentType,
-        annotation: frontmatter.annotation,
-        confidence: frontmatter.confidence,
-        influencedBy: frontmatter.influencedBy,
-        sources: frontmatter.sources,
-      };
+      const content = fromBase64(data.content);
+      const file: NoteFile = { path, name: path.split('/').pop() || path, content, sha: data.sha };
       setCurrentFile(file);
-      setEditorContent(body);
+      setEditorContent(content);
     } catch (e) {
       console.error('Failed to load file:', e);
     }
@@ -299,7 +250,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (!config) return;
     const filePath = path || currentFile?.path;
     const fileContent = content ?? editorContent;
-    if (!filePath || !currentFile) return;
+    if (!filePath) return;
     
     setIsSaving(true);
     try {
@@ -310,20 +261,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         sha = existing.sha;
       } catch { /* new file */ }
 
-      const frontmatter = {
-        contentType: currentFile.contentType,
-        annotation: currentFile.annotation,
-        confidence: currentFile.confidence,
-        influencedBy: currentFile.influencedBy,
-        sources: currentFile.sources,
-      };
-      const fullContent = generateFrontmatter(frontmatter, fileContent);
-
       await githubFetch(config, filePath, {
         method: 'PUT',
         body: JSON.stringify({
           message: `Update ${filePath}`,
-          content: toBase64(fullContent),
+          content: toBase64(fileContent),
           ...(sha ? { sha } : {}),
         }),
       });
