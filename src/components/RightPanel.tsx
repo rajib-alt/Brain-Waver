@@ -27,7 +27,7 @@ interface UnlinkedMention {
 
 export function RightPanel() {
   const {
-    showRightPanel, currentFile, backlinks, files, loadFile,
+    showRightPanel, currentFile, setCurrentFile, backlinks, files, loadFile,
     aiSuggestions, setAiSuggestions, editorContent, setEditorContent, moveFile,
     saveFile, fetchFiles, createNote,
   } = useApp();
@@ -155,6 +155,60 @@ export function RightPanel() {
             <Button size="sm" variant="ghost" className="h-6 text-[10px] w-full text-muted-foreground" onClick={() => setAiSuggestions(null)}>
               <X className="h-3 w-3 mr-1" /> Dismiss
             </Button>
+          </div>
+        )}
+
+        {/* Note Metadata */}
+        {currentFile && (currentFile.contentType || currentFile.annotation) && (
+          <div className="bg-secondary/50 rounded-lg p-3 space-y-2">
+            <div className="flex items-center gap-1.5 text-xs text-secondary-foreground">
+              <Sparkles className="h-3 w-3" />
+              <span className="font-medium">Note Analysis</span>
+            </div>
+            {currentFile.contentType && (
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Type</p>
+                <button
+                  onClick={() => {
+                    const newType = prompt('Enter new content type:', currentFile.contentType);
+                    if (newType && newType !== currentFile.contentType) {
+                      setCurrentFile({ ...currentFile, contentType: newType });
+                    }
+                  }}
+                  className="inline-flex items-center px-2 py-1 text-xs bg-primary/10 text-primary rounded-full capitalize hover:bg-primary/20 transition-colors"
+                >
+                  {currentFile.contentType}
+                </button>
+                {currentFile.confidence && (
+                  <span className="ml-2 text-[10px] text-muted-foreground">
+                    {Math.round(currentFile.confidence * 100)}% confidence
+                  </span>
+                )}
+              </div>
+            )}
+            {currentFile.annotation && (
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">AI Insight</p>
+                <p className="text-xs text-foreground leading-relaxed">{currentFile.annotation}</p>
+              </div>
+            )}
+            {currentFile.influencedBy && currentFile.influencedBy.length > 0 && (
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Connections</p>
+                <div className="space-y-1">
+                  {currentFile.influencedBy.map(path => (
+                    <button
+                      key={path}
+                      onClick={() => loadFile(path)}
+                      className="flex items-center gap-1.5 w-full px-2 py-1 text-xs text-muted-foreground hover:text-primary rounded transition-colors"
+                    >
+                      <Link2 className="h-3 w-3" />
+                      <span className="truncate">{path.replace('.md', '').split('/').pop()}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 

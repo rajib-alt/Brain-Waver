@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <style>
+      .brain { fill: #6366f1; }
+      .wrinkle { fill: #4f46e5; }
+    </style>
+  </defs>
+  <!-- Main brain shape -->
+  <path class="brain" d="M50 10c-15 0-25 10-25 25v30c0 15 10 25 25 25s25-10 25-25V35c0-15-10-25-25-25z"/>
+  <!-- Left hemisphere -->
+  <path class="wrinkle" d="M25 35c0-5 5-10 10-10s10 5 10 10v20c0 5-5 10-10 10s-10-5-10-10V35z"/>
+  <!-- Right hemisphere -->
+  <path class="wrinkle" d="M55 35c0-5 5-10 10-10s10 5 10 10v20c0 5-5 10-10 10s-10-5-10-10V35z"/>
+  <!-- Brain waves -->
+  <path class="brain" d="M10 50c0-5 5-5 5-10s5-5 5 0 5 5 5-5 5-5 5 0 5 5 5-5 5-5 5 0 5 5 5-5c0-5 5-5 5 0"/>
+  <path class="brain" d="M90 50c0-5-5-5-5-10s-5-5-5 0-5 5-5-5-5-5-5 0-5 5-5-5-5-5-5 0-5 5-5-5c0-5-5-5-5 0"/>
+</svg>
