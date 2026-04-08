@@ -63,6 +63,8 @@ Existing structure:\n${fileTree}`,
     } finally {
       setIsAiLoading(false);
     }
+  };
+
   const handleFindConnections = async () => {
     if (!openRouterKey || !editorContent || !currentFile) return;
     setIsAiLoading(true);
@@ -111,6 +113,8 @@ Output JSON with array of connected note paths: { "connections": ["path/to/note1
       setIsAiLoading(false);
     }
   };
+
+  if (!currentFile) {
     return (
       <div className="flex-1 flex items-center justify-center bg-background">
         <div className="text-center">
